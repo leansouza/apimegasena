@@ -3,7 +3,7 @@ import uuid
 from typing import Dict, Tuple
 
 from app.main import db
-from app.main.model.user import User
+from app.main.model.user import User, user_share_schema, users_share_schema
 
 
 def save_new_user(data: Dict[str, str]) -> Tuple[Dict[str, str], int]:
@@ -16,9 +16,11 @@ def save_new_user(data: Dict[str, str]) -> Tuple[Dict[str, str], int]:
             password=data['password'],
             registered_on=datetime.datetime.utcnow()
         )
-        print(new_user)
         save_changes(new_user)
-        return generate_token(new_user)
+        userID = user_share_schema.dump(
+            User.query.filter_by(username=new_user.username).first()
+        )
+        return generate_token(userID['id'])
     else:
         response_object = {
             'status': 'fail',
@@ -32,18 +34,20 @@ def get_all_users():
 
 
 def get_a_user(public_id):
+    
     return User.query.filter_by(public_id=public_id).first()
 
 
 def get_user_delete(public_id):
     delete_user = User.query.filter_by(public_id=public_id).delete()
     
+   
     if delete_user:
         response_object = {
             'status': 'success',
             'message': 'User removed successfully!',
         }
-        return response_object, 409
+        return response_object, 201
     else:
         response_object = {
             'status': 'fail',
@@ -62,7 +66,7 @@ def generate_token(user: User) -> Tuple[Dict[str, str], int]:
         response_object = {
             'status': 'success',
             'message': 'Successfully registered.',
-            'Authorization': auth_token.decode()
+            'Authorization': auth_token
         }
         return response_object, 201
     except Exception as e:

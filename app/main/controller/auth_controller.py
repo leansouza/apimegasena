@@ -19,7 +19,6 @@ class UserLogin(Resource):
     def post(self) -> Tuple[Dict[str, str], int]:
         # get the post data
         post_data = request.json
-        print(post_data)
         return Auth.login_user(data=post_data)
 
 

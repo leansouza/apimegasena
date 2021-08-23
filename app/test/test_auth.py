@@ -47,7 +47,7 @@ class TestAuthBlueprint(BaseTestCase):
         register_user(self)
         with self.client:
             response = register_user(self)
-            print(response)
+            
             data = json.loads(response.data.decode())
             self.assertTrue(data['status'] == 'fail')
             self.assertTrue(
@@ -60,7 +60,7 @@ class TestAuthBlueprint(BaseTestCase):
         with self.client:
             # user registration
             resp_register = register_user(self)
-            print(resp_register)
+            
            
             data_register = json.loads(resp_register.data.decode())
             self.assertTrue(data_register['status'] == 'success')
@@ -85,7 +85,7 @@ class TestAuthBlueprint(BaseTestCase):
             response = login_user(self)
             data = json.loads(response.data.decode())
             self.assertTrue(data['status'] == 'fail')
-            print(data['message'])
+            
             self.assertTrue(data['message'] == 'email or password does not match.')
             self.assertTrue(response.content_type == 'application/json')
             self.assertEqual(response.status_code, 401)

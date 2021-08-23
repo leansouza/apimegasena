@@ -17,3 +17,11 @@ class AuthDto:
         'email': fields.String(required=True, description='The email address'),
         'password': fields.String(required=True, description='The user password '),
     })
+
+
+class GameDto:
+    api = Namespace('plays', description='game related operations')
+    user_plays = api.model('plays', {
+        'idbilhete': fields.String(required=True, description='id game ticker'),
+        'game': fields.String(required=True, description='ticket game')
+    })

@@ -29,6 +29,8 @@ class TestUserModel(BaseTestCase):
         db.session.add(user)
         db.session.commit()
         
+        print(user)
+
         auth_token = User.encode_auth_token(user.id)
    
         self.assertTrue(isinstance(auth_token, str))
